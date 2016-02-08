@@ -1,0 +1,74 @@
+
+.IssueList {
+  border-right: 1px solid #e5e5e5;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.IssueListItem {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 7px 10px 7px 30px;
+  min-height: 87px;
+
+  & + & {
+    border-top: 1px solid #e5e5e5;
+  }
+
+  &:last-child {
+    box-shadow: 0 1px 0 #e5e5e5;
+  }
+
+  > * + * {
+    margin-top: 6px;
+  }
+
+  &:global(.open)   :global(.octicon) { color: #6cc644; }
+  &:global(.closed) :global(.octicon) { color: #bd2c00; }
+  &:global(.merged) :global(.octicon) { color: #6e5494; }
+
+  .repo {
+    font-size: 12px;
+    color: #bfbfbf;
+    position: relative;
+    overflow: visible;
+
+    :global(.octicon) {
+      position: absolute;
+      top: -2px;
+      left: -23px;
+    }
+  }
+
+  .title {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .body {
+    color: #989898;
+    font-size: 13px;
+    line-height: 1.2em;
+    max-height: calc(1.2em * 3);
+    overflow: hidden;
+  }
+}
+
+.IssueListItemSelected {
+  composes: IssueListItem;
+  background-color: #7FA5CF;
+
+  &, & + .IssueListItem {
+    border-top-color: #fff !important;
+  }
+
+  &:last-child {
+    box-shadow: 0 1px 0 #fff;
+  }
+
+  &, .repo, .title { color: #fff; }
+  .body {
+    color: #d2dfee;
+  }
+}

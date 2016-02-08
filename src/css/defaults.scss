@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+  user-select: none;
+  outline: none;
+  cursor: default;
+  overflow: hidden;
+}
+
+html, body {
+  overflow: hidden;
+}
+
+html {
+  font-family: sans-serif;
+}
+
+body {
+  color: #333;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+textarea,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+textarea {
+  width: 100%;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

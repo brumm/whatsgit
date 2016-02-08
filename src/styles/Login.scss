@@ -1,0 +1,24 @@
+
+.LoginPage {
+  background-color: #E9EFF4;
+
+  :global(.mega-octicon) {
+    position: relative;
+    top: -50px;
+    font-size: 150px;
+  }
+}
+
+.LoginButton {
+  position: relative;
+  top: -10px;
+
+  background-color: #fff;
+  border: none;
+  box-shadow:
+    0 0 0 1px #d4e0e9,
+    0 5px 30px #bccdda;
+  border-radius: 3px;
+  padding: 15px 30px;
+  font-size: 30px;
+}

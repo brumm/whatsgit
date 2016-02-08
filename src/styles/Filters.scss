@@ -1,0 +1,39 @@
+
+.FilterList {
+  min-width: 200px;
+  border-right: 1px solid #e5e5e5;
+  padding: 0 0 10px 0;
+  font-size: 14px;
+  background-color: #FAFAFA;
+  overflow-y: auto;
+}
+
+.FilterListItem {
+  height: 28px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+
+  .name {
+    margin-right: 30px;
+  }
+
+  .count {
+    height: 18px;
+    margin-left: auto;
+    padding: 0 8px;
+    border-radius: 20px;
+    background-color: #e5e5e5;
+  }
+}
+
+.FilterListItemSelected {
+  composes: FilterListItem;
+  background-color: #7FA5CF;
+  color: #fff;
+
+  .count {
+    background-color: #5c81aa;
+  }
+}

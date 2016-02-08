@@ -1,0 +1,14 @@
+
+.Titlebar {
+  height: 38px;
+  padding: 0 10px;
+  background-color: #fafafa;
+  background-image: linear-gradient(top,
+    #ededed 0,
+    #ededed 1px,
+    #e7e7e7 2px,
+    #d1d1d1 100%
+  );
+  border-bottom: 1px solid #afafaf;
+  font-size: 13px;
+}

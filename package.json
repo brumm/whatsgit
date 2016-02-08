@@ -1,0 +1,46 @@
+{
+  "name": "whatsgitup",
+  "version": "1.0.0",
+  "description": "github command center",
+  "main": "public/main.js",
+  "scripts": {
+    "build": "nwb build && npm run package",
+    "package": "electron-packager ./public Whatsgit --overwrite --platform=darwin --arch=x64 --version=0.36.7 --icon=images/app-icon.icns --ignore='src' --ignore='coverage'",
+    "clean": "nwb clean",
+    "start": "node --harmony_destructuring --harmony_arrow_functions dev-server.js",
+    "test": "nwb test"
+  },
+  "dependencies": {
+    "alphanumeric-id": "^1.0.0",
+    "markdown-it": "^5.1.0",
+    "markdown-it-emoji": "^1.1.0",
+    "object-filter": "^1.0.2",
+    "promise-all": "^1.0.0",
+    "qry": "^0.1.0",
+    "react": "0.14.x",
+    "react-css-modules": "^3.7.4",
+    "react-dom": "0.14.x",
+    "react-flex-component": "file:///Users/brumm/Code/react/react-flex-component",
+    "react-octicon": "^2.0.0",
+    "react-redux": "^4.4.0",
+    "react-router": "^2.0.0-rc6",
+    "redux": "^3.3.0",
+    "redux-actions": "^0.9.1",
+    "redux-localstorage": "^0.4.0",
+    "redux-logger": "^2.5.0",
+    "redux-persist": "^1.5.0",
+    "redux-thunk": "^1.0.3",
+    "remove-markdown": "^0.1.0",
+    "superagent": "^1.7.2"
+  },
+  "devDependencies": {
+    "electron-packager": "^5.2.1",
+    "electron-prebuilt": "^0.36.7",
+    "express": "^4.13.4",
+    "nwb": "^0.7.2",
+    "nwb-sass": "^0.5.0"
+  },
+  "author": "Philipp Brumm",
+  "license": "MIT",
+  "repository": ""
+}
