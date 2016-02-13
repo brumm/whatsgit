@@ -3,3 +3,4 @@ node_modules
 /public/build
 npm-debug.log
 .env
+release

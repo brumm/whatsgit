@@ -30,6 +30,15 @@ app.on('ready', function() {
     }
   });
 
+  if (!process.env.DEV) {
+    mainWindow.webContents.on('will-navigate', function(e, url) {
+      if (url.startsWith('http')) {
+        e.preventDefault();
+        require('shell').openExternal(url);
+      }
+    })
+  }
+
   mainWindowState.manage(mainWindow);
 
   var template = require('./menu-template');
@@ -43,8 +52,4 @@ app.on('ready', function() {
   console.log(windowUrl);
   mainWindow.loadURL(windowUrl);
   // mainWindow.openDevTools()
-
-  mainWindow.on('closed', function() {
-    mainWindow = null;
-  });
 });

@@ -14,7 +14,7 @@ export default function configureStore(initialState) {
         thunkMiddleware,
         loggerMiddleware
       ),
-      persistState(['filters', 'filterOutputCache', 'user', 'issues', 'comments'])
+      persistState(['filters', 'filterOutputCache', 'user', 'issues', 'comments', 'defaultFilterId', 'notifications'])
     )
   )
 

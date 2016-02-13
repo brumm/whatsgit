@@ -4,11 +4,12 @@
   "description": "github command center",
   "main": "public/main.js",
   "scripts": {
-    "build": "nwb build && npm run package",
-    "package": "electron-packager ./public Whatsgit --overwrite --platform=darwin --arch=x64 --version=0.36.7 --icon=images/app-icon.icns --ignore='src' --ignore='coverage'",
+    "build": "nwb build && npm run fixfonts && npm run package",
+    "package": "electron-packager ./public Whatsgit --overwrite --prune --platform=darwin --arch=x64 --version=0.36.7 --out='release'",
     "clean": "nwb clean",
     "start": "node --harmony_destructuring --harmony_arrow_functions dev-server.js",
-    "test": "nwb test"
+    "test": "nwb test",
+    "fixfonts": "sed -i '' 's/\\/build\\///g' ./public/build/vendor.css"
   },
   "dependencies": {
     "alphanumeric-id": "^1.0.0",
@@ -24,6 +25,8 @@
     "react-octicon": "^2.0.0",
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0-rc6",
+    "react-textarea-autosize": "^3.3.0",
+    "react-timeago": "^2.2.1",
     "redux": "^3.3.0",
     "redux-actions": "^0.9.1",
     "redux-localstorage": "^0.4.0",

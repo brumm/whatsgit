@@ -4,20 +4,36 @@ import { hashHistory } from 'react-router'
 import Flex from 'react-flex-component'
 import Octicon from 'react-octicon'
 
-import { setLoggedIn, getUser } from '../redux/actions'
+import { setLoggedIn, setDefaultFilterId, getUser } from '../redux/actions'
 import startGithubAuth from '../utils/startGithubAuth'
+import makeId from '../utils/makeId'
 import style from '../styles/Login.scss'
 
-@connect()
+@connect(({filterOutputCache}) => ({filterOutputCache}))
 export default class Login extends React.Component {
 
+  state = {
+    loading: false
+  }
+
   auth() {
+    let defaultFilterId = makeId()
     startGithubAuth()
       .then(token => {
         localStorage.setItem('token', token)
+        this.props.dispatch(setDefaultFilterId(defaultFilterId))
         this.props.dispatch(setLoggedIn(true))
-        this.props.dispatch(getUser())
-        hashHistory.replace('/inbox/filters')
+        this.setState({ loading: true })
+        this.props.dispatch(getUser()).then(() => {
+
+          let interval = setInterval(() => {
+            if (Object.keys(this.props.filterOutputCache).length === 9) {
+              this.setState({ loading: false })
+              hashHistory.replace(`/inbox/filters/${defaultFilterId}`)
+              clearInterval(interval)
+            }
+          }, 100)
+        })
       })
       .catch(::console.error)
   }
@@ -34,7 +50,10 @@ export default class Login extends React.Component {
         <Octicon name='mark-github' mega />
 
         <button className={style.LoginButton} onClick={::this.auth}>
-          <span>Login with Github</span>
+          {this.state.loading
+            ? <span>Loading issues...</span>
+            : <span>Login with Github</span>
+          }
         </button>
       </Flex>
     )

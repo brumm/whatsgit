@@ -12,6 +12,10 @@
   <body>
     <div id="app"></div>
     <script src="build/vendor.js"></script>
+    <script src="https://cdn.ravenjs.com/2.1.0/raven.min.js"></script>
+    <script>
+      Raven.config(process.env.DEV === undefined && 'https://0e7d40aa47654039a8f81ee5063ec309@app.getsentry.com/66594').install()
+    </script>
     <script src="build/app.js"></script>
   </body>
 </html>

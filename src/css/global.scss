@@ -2,11 +2,22 @@
 @import "defaults";
 
 :global {
+
+  .octicon {
+    min-width: 16px;
+    min-height: 16px;
+    text-align: center;
+  }
+
   .markdown-body {
     font-size: 16px;
     font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     line-height: 1.6;
     word-wrap: break-word;
+
+    em {
+      font-style: italic;
+    }
 
     & > *:last-child {
       margin-bottom: 0;
@@ -15,6 +26,7 @@
     a {
       background-color: transparent;
       word-wrap: break-word;
+      cursor: pointer;
     }
 
     a:active,
@@ -352,7 +364,7 @@
     }
 
     hr {
-      height: 4px;
+      height: 2px;
       padding: 0;
       margin: 16px 0;
       background-color: #e7e7e7;

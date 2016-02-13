@@ -11,8 +11,8 @@ import { getUser, getComments } from './redux/actions'
 import App from './components/App'
 import Login from './components/Login'
 import Inbox from './components/Inbox'
-import Issues from './components/Issues'
-import {EmptyIssues} from './components/Issues'
+import IssuesList from './components/IssuesList'
+import {EmptyIssuesList} from './components/IssuesList'
 import Filters from './components/Filters'
 import Issue from './components/Issue'
 import {EmptyIssue} from './components/Issue'
@@ -31,6 +31,7 @@ function requireLogin(nextState, replaceState) {
 
 function loadCommentsIfNeeded(nextState, replaceState, done) {
   const {filterId, issueId} = nextState.params
+
   if (!store.getState().issues[issueId]) {
     replaceState(`/inbox/filters/${filterId}`)
   } else {
@@ -50,8 +51,8 @@ render((
       <Route component={App}>
         <Route path='/login' component={Login} />
         <Route path='/inbox' component={Inbox} onEnter={requireLogin}>
-          <IndexRoute components={{issues: EmptyIssues, filters: Filters}} />
-          <Route path="filters/:filterId" components={{issues: Issues, filters: Filters}}>
+          <IndexRoute components={{issues: EmptyIssuesList, filters: Filters}} />
+          <Route path="filters/:filterId" components={{issues: IssuesList, filters: Filters}}>
             <IndexRoute component={EmptyIssue} />
             <Route path="issues/:issueId" component={Issue} onEnter={loadCommentsIfNeeded} />
           </Route>

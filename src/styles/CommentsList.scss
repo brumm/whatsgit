@@ -1,0 +1,63 @@
+
+.CommentsList {
+  padding: 5px;
+}
+
+.Comment {
+  margin: 5px;
+  overflow: hidden;
+  border-bottom: 1px solid #d9e0e6;
+  background-color: #fff;
+
+  .header {
+    padding: 10px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #E8E8E8;
+
+    .username {
+      font-size: 14px;
+      color: silver;
+    }
+
+    .avatar {
+      align-self: stretch;
+      flex-shrink: 0;
+      max-width: 28px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .avatar + div {
+      margin-left: 10px;
+    }
+  }
+
+  .body {
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: 10px;
+  }
+}
+
+.NewComment {
+  composes: Comment;
+  position: relative;
+
+  .tools {
+    background-color: #E9EFF4;
+    padding: 0 10px 10px;
+
+    :global(.octicon) {
+      font-size: 20px;
+    }
+  }
+
+  .header {
+    border-bottom: none;
+  }
+
+  .textarea {
+    border: none;
+    padding: 10px;
+    resize: none;
+  }
+}
