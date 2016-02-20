@@ -6,7 +6,7 @@ import { Router, IndexRoute, Route, Redirect, hashHistory } from 'react-router'
 import { Provider } from 'react-redux'
 
 import configureStore from './redux/configureStore'
-import { getUser, getComments } from './redux/actions'
+import { getComments } from './redux/actions'
 
 import App from './components/App'
 import Login from './components/Login'
