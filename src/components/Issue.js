@@ -49,7 +49,10 @@ export default class Issue extends React.Component {
 
           <Flex direction='column' justifyContent='center' grow={1}>
             <div className={style.url}>
-              <a href={this.props.issue.html_url}>{`${this.props.issue.owner}/${this.props.issue.repo}#${this.props.issue.number}`}</a>
+              <a href={this.props.issue.html_url}>
+                <span>{`${this.props.issue.owner}/${this.props.issue.repo}`}</span>
+                <span className={style.number}>{`#${this.props.issue.number}`}</span>
+              </a>
             </div>
 
             <div className={style.title}>
