@@ -18,8 +18,8 @@ export default class Login extends React.Component {
 
   auth() {
     let defaultFilterId = makeId()
-    startGithubAuth()
-      .then(token => {
+    let auth = startGithubAuth()
+    auth.then(token => {
         localStorage.setItem('token', token)
         this.props.dispatch(setDefaultFilterId(defaultFilterId))
         this.props.dispatch(setLoggedIn(true))
@@ -35,7 +35,7 @@ export default class Login extends React.Component {
           }, 100)
         })
       })
-      .catch(::console.error)
+    auth.catch(::console.error)
   }
 
   render() {
