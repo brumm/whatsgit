@@ -21,30 +21,34 @@ function request(method, url, params) {
   })
 }
 
-export function post(url, params) {
+// generic HTTP verbs
+
+function post(url, params) {
   return request('post', url, params)
 }
 
-export function put(url, params) {
+function put(url, params) {
   return request('put', url, params)
 }
 
-export function patch(url, params) {
+function patch(url, params) {
   return request('patch', url, params)
 }
 
-export function get(url, params) {
+function get(url, params) {
   return request('get', url, params)
 }
 
-export function search(query) {
+// github api
+
+export function issueSearch(query) {
   return get('/search/issues', {
     q: query,
     per_page: 100
   }).then(body => body.items)
 }
 
-export function comments(owner, repo, number) {
+export function issueComments(owner, repo, number) {
   return get(`/repos/${owner}/${repo}/issues/${number}/comments`)
 }
 
@@ -56,18 +60,14 @@ export function editIssue(owner, repo, number, body) {
   return patch(`/repos/${owner}/${repo}/issues/${number}`, body)
 }
 
-export function issue(owner, repo, number) {
+export function getIssue(owner, repo, number) {
   return get(`/repos/${owner}/${repo}/issues/${number}`)
 }
 
-export function user() {
+export function getUser() {
   return get('/user')
 }
 
-export function notifications() {
+export function getNotifications() {
   return get('/notifications')
-}
-
-export function merge(owner, repo, number) {
-  return put(`/repos/${owner}/${repo}/pulls/${number}/merge`)
 }

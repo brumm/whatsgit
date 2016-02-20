@@ -1,25 +1,13 @@
 import all from 'promise-all'
 import { createAction } from 'redux-actions'
-import { hashHistory } from 'react-router'
 
-import {
-  user,
-  search,
-  comments,
-  createComment,
-  get,
-  notifications,
-  issue,
-  editIssue,
-  merge
-} from '../utils/api'
-window.get = get
+import * as ghApi from '../utils/api'
 
-import makeId from '../utils/makeId'
+import makeId        from '../utils/makeId'
 import arrayToObject from '../utils/arrayToObject'
 import objectToArray from '../utils/objectToArray'
-import filterIssues from '../utils/filterIssues'
-import getRepo from '../utils/getRepo'
+import filterIssues  from '../utils/filterIssues'
+import getRepo       from '../utils/getRepo'
 
 export const setFilters         = createAction('SET_FILTERS')
 export const setIssues          = createAction('SET_ISSUES')
@@ -42,28 +30,35 @@ export const createFilter = createAction('CREATE_FILTER',
 )
 
 export const createFilterOutputCache = createAction('CREATE_FILTER_OUTPUT_CACHE',
-  (output, id) => ({
-    [id]: output
-  })
-)
-
-export const createFilterAndCreateFilterOutputCache = (filter, id=makeId()) => (
-  (dispatch, getState) => {
-    let issues = filterIssues(getState().issues, filter.query)
+  (issues, query, id) => {
+    issues = filterIssues(issues, query)
     let issueIds = objectToArray(issues)
       .sort((a, b) => a.score < b.score ? 1 : -1)
       .sort((a, b) => a.updated_at < b.updated_at ? 1 : -1)
       .map(({id}) => id)
 
+    return { [id]: issueIds }
+  }
+)
+
+export const updateFilterOutputCache = () => (
+  (dispatch, getState) => {
+    let {issues, filters} = getState()
+
+  }
+)
+
+export const createFilterAndCreateFilterOutputCache = (filter, id=makeId()) => (
+  (dispatch, getState) => {
     dispatch(createFilter(filter, id))
-    dispatch(createFilterOutputCache(issueIds, id))
+    dispatch(createFilterOutputCache(getState().issues, filter.query, id))
   }
 )
 
 
 export const getUser = () => (
   (dispatch, getState) => (
-    user()
+    ghApi.getUser()
       .then(user => {
         dispatch(setUser(user))
         dispatch(setLoggedIn(true))
@@ -74,7 +69,7 @@ export const getUser = () => (
 
 export const appBootstrap = window.appBootstrap = () => (
   (dispatch, getState) => (
-    user()
+    ghApi.getUser()
       .then(user => {
         dispatch(setFilters({}))
         dispatch(getNotifications())
@@ -98,8 +93,8 @@ export const getIssues = (username) => (
   (dispatch, getState) => (
 
     all({
-      privateIssues: search(`involves:${username} is:private`),
-      publicIssues: search(`involves:${username} is:public`)
+      privateIssues: ghApi.issueSearch(`involves:${username} is:private`),
+      publicIssues: ghApi.issueSearch(`involves:${username} is:public`)
     })
     .then(({privateIssues, publicIssues}) => {
 
@@ -125,19 +120,11 @@ export const getIssues = (username) => (
   )
 )
 
-// export const getIssue = (issueId) => (
-//   (dispatch, getState) => {
-//     const {number, owner, repo} = getState().issues[issueId]
-//     return issue(owner, repo, number)
-//       .then(issue => dispatch(setIssue(issue, issueId)))
-//   }
-// )
-
 export const getComments = (issueId) => (
   (dispatch, getState) => {
     const {number, owner, repo} = getState().issues[issueId]
 
-    return comments(owner, repo, number)
+    return ghApi.issueComments(owner, repo, number)
       .then(comments => dispatch(setComments({
         [issueId]: comments
       })))
@@ -146,7 +133,7 @@ export const getComments = (issueId) => (
 
 export const getNotifications = () => (
   (dispatch, getState) => {
-    return notifications()
+    return ghApi.getNotifications()
       .then(notifications => dispatch(setNotifications(notifications)))
   }
 )
@@ -154,7 +141,7 @@ export const getNotifications = () => (
 export const postComment = (issueId, body) => (
   (dispatch, getState) => {
     const {number, owner, repo} = getState().issues[issueId]
-    return createComment(owner, repo, number, body)
+    return ghApi.createComment(owner, repo, number, body)
       .then(notifications => dispatch(
         getComments(issueId)
       ))
@@ -164,7 +151,7 @@ export const postComment = (issueId, body) => (
 export const closeIssue = (issueId) => (
   (dispatch, getState) => {
     const {number, owner, repo} = getState().issues[issueId]
-    return editIssue(owner, repo, number, { state: 'closed' })
+    return ghApi.editIssue(owner, repo, number, { state: 'closed' })
       .then(issue => dispatch(
         setIssue({
           ...getState().issues[issueId],
@@ -177,7 +164,7 @@ export const closeIssue = (issueId) => (
 export const openIssue = (issueId) => (
   (dispatch, getState) => {
     const {number, owner, repo} = getState().issues[issueId]
-    return editIssue(owner, repo, number, { state: 'opened' })
+    return ghApi.editIssue(owner, repo, number, { state: 'opened' })
       .then(issue => dispatch(
         setIssue({
           ...getState().issues[issueId],
