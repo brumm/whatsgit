@@ -18,7 +18,7 @@ import Issue from './components/Issue'
 import {EmptyIssue} from './components/Issue'
 
 const store = window.store = configureStore({
-  loggedIn: !!localStorage.getItem('token')
+  loggedIn: !!window.localStorage.getItem('token')
 })
 
 hashHistory.listen(({pathname}) => console.info('[location]', pathname))
