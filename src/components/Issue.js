@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Flex from 'react-flex-component'
 import MarkdownIt from 'markdown-it'
 import emojiIt from 'markdown-it-emoji'
+import highlightIt from 'markdown-it-highlightjs'
 
 import style from '../styles/Issue.scss'
 import CommentsList from './CommentsList'
@@ -14,6 +15,7 @@ const md = new MarkdownIt({
   typographer: true
 })
 md.use(emojiIt)
+md.use(highlightIt, { auto: false, code: false })
 
 function isLight(c) {
   let sum = parseInt(c[0]+c[1], 16)
