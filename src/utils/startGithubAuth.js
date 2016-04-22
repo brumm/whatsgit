@@ -8,8 +8,8 @@ import { post } from './api'
 export default function githubAuth() {
   return new Promise((resolve, reject) => {
     var authWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
+      width: 1020,
+      height: 610,
       'web-preferences': {
         'node-integration': false
       }
