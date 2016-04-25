@@ -67,17 +67,17 @@ class IssuesListItem extends React.Component {
   }
 })
 export default class IssuesList extends React.Component {
-  // componentDidMount() {
-  //   if (this.props.params.issueId === undefined) {
-  //     hashHistory.replace(`/inbox/filters/${this.props.params.filterId}/issues/${this.props.issues[0].id}`)
-  //   }
-  // }
+  componentDidMount() {
+    if (this.props.issues.length > 0 && this.props.params.issueId === undefined) {
+      hashHistory.replace(`/inbox/filters/${this.props.params.filterId}/issues/${this.props.issues[0].id}`)
+    }
+  }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.props.params.issueId === undefined) {
-  //     hashHistory.replace(`/inbox/filters/${this.props.params.filterId}/issues/${this.props.issues[0].id}`)
-  //   }
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.issues.length > 0 && this.props.params.issueId === undefined) {
+      hashHistory.replace(`/inbox/filters/${this.props.params.filterId}/issues/${this.props.issues[0].id}`)
+    }
+  }
 
   render() {
     return (
