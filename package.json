@@ -21,7 +21,7 @@
     "react": "0.14.x",
     "react-css-modules": "^3.7.4",
     "react-dom": "0.14.x",
-    "react-flex-component": "file:///Users/brumm/Code/react/react-flex-component",
+    "flex-component": "^0.1.3",
     "react-octicon": "^2.0.0",
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0-rc6",

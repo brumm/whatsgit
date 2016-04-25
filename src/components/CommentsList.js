@@ -1,5 +1,5 @@
 import React from 'react'
-import Flex from 'react-flex-component'
+import Flex from 'flex-component'
 import MarkdownIt from 'markdown-it'
 import emojiIt from 'markdown-it-emoji'
 import TimeAgo from 'react-timeago'

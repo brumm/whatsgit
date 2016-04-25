@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Flex from 'react-flex-component'
+import Flex from 'flex-component'
 import { hashHistory } from 'react-router'
 
 @connect(({defaultFilterId}) => ({defaultFilterId}))

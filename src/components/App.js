@@ -1,5 +1,5 @@
 import React from 'react'
-import Flex from 'react-flex-component'
+import Flex from 'flex-component'
 
 import Titlebar from './Titlebar'
 import style from '../styles/App.scss'

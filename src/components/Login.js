@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { hashHistory } from 'react-router'
-import Flex from 'react-flex-component'
+import Flex from 'flex-component'
 import Octicon from 'react-octicon'
 
 import { setLoggedIn, setDefaultFilterId, getUser } from '../redux/actions'

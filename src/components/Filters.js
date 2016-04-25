@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import Flex from 'react-flex-component'
+import Flex from 'flex-component'
 
 import style from '../styles/Filters.scss'
 import objectToArray from '../utils/objectToArray'

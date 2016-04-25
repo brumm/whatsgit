@@ -1,5 +1,5 @@
 import React from 'react'
-import Flex from 'react-flex-component'
+import Flex from 'flex-component'
 import { connect } from 'react-redux'
 import Octicon from 'react-octicon'
 
