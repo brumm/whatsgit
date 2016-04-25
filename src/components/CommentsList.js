@@ -6,6 +6,7 @@ import TimeAgo from 'react-timeago'
 import Octicon from 'react-octicon'
 import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
+import highlightIt from 'markdown-it-highlightjs'
 
 import { postComment } from '../redux/actions'
 
@@ -13,6 +14,7 @@ const md = new MarkdownIt({
   linkify: true,
   typographer: true
 })
+md.use(highlightIt, { auto: true, code: false })
 md.use(emojiIt)
 
 import style from '../styles/CommentsList.scss'

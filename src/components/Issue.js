@@ -15,7 +15,7 @@ const md = new MarkdownIt({
   typographer: true
 })
 md.use(emojiIt)
-md.use(highlightIt, { auto: false, code: false })
+md.use(highlightIt, { auto: true, code: false })
 
 function isLight(c) {
   let sum = parseInt(c[0]+c[1], 16)
