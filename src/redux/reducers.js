@@ -15,13 +15,6 @@ export default {
     })
   }, {}),
 
-  filterOutputCache: handleActions({
-    CREATE_FILTER_OUTPUT_CACHE: (state, {payload}) => ({
-      ...state,
-      ...payload
-    })
-  }, {}),
-
   user: handleActions({
     SET_USER: (state, {payload}) => payload
   }, null),

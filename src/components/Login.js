@@ -9,7 +9,7 @@ import startGithubAuth from '../utils/startGithubAuth'
 import makeId from '../utils/makeId'
 import style from '../styles/Login.scss'
 
-@connect(({filterOutputCache}) => ({filterOutputCache}))
+@connect()
 export default class Login extends React.Component {
 
   state = {
@@ -25,14 +25,8 @@ export default class Login extends React.Component {
         this.props.dispatch(setLoggedIn(true))
         this.setState({ loading: true })
         this.props.dispatch(getUser()).then(() => {
-
-          let interval = setInterval(() => {
-            if (Object.keys(this.props.filterOutputCache).length === 9) {
-              this.setState({ loading: false })
-              hashHistory.replace(`/inbox/filters/${defaultFilterId}`)
-              clearInterval(interval)
-            }
-          }, 100)
+          this.setState({ loading: false })
+          hashHistory.replace(`/inbox/filters/${defaultFilterId}`)
         })
       })
     auth.catch(::console.error)

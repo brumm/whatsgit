@@ -52,33 +52,32 @@ class IssuesListItem extends React.Component {
   }
 }
 
-@connect(({issues, comments, filterOutputCache, notifications}, {params: {filterId}}) => {
-  issues = (filterOutputCache[filterId] || []).map(issueId => {
-    let issue = issues[issueId]
-    return {
-      id: issueId,
-      unread: false,
-      ...issue
-    }
-  })
+@connect(({issues, comments, notifications, filters}, {params: {filterId}}) => {
+  if (filters[filterId]) {
+    issues = filters[filterId].matchedIssues.map(issueId => issues[issueId])
+  }
+  issues = objectToArray(issues, ({id}) => ({
+    unread: notifications.includes(id)
+  }))
 
   return {
+    filter: filters[filterId],
     issues,
     comments
   }
 })
 export default class IssuesList extends React.Component {
-  componentDidMount() {
-    if (this.props.params.issueId === undefined) {
-      hashHistory.replace(`/inbox/filters/${this.props.params.filterId}/issues/${this.props.issues[0].id}`)
-    }
-  }
+  // componentDidMount() {
+  //   if (this.props.params.issueId === undefined) {
+  //     hashHistory.replace(`/inbox/filters/${this.props.params.filterId}/issues/${this.props.issues[0].id}`)
+  //   }
+  // }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.params.issueId === undefined) {
-      hashHistory.replace(`/inbox/filters/${this.props.params.filterId}/issues/${this.props.issues[0].id}`)
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.props.params.issueId === undefined) {
+  //     hashHistory.replace(`/inbox/filters/${this.props.params.filterId}/issues/${this.props.issues[0].id}`)
+  //   }
+  // }
 
   render() {
     return (

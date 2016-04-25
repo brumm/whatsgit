@@ -45,10 +45,8 @@ class FiltersListItem extends React.Component {
   }
 }
 
-@connect(({filters, filterOutputCache}) => ({
-  filters: objectToArray(filters, ({id}) => ({
-    count: (filterOutputCache[id] || []).length
-  }))
+@connect(({filters}) => ({
+  filters: objectToArray(filters)
 }))
 export default class Filters extends React.Component {
   render() {

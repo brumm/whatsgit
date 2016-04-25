@@ -69,5 +69,10 @@ export function getUser() {
 }
 
 export function getNotifications() {
-  return get('/notifications')
+  return get('/notifications').then(notifications => (
+    notifications.map(notification => ({
+      ...notification,
+      issueId: notification.subject.url.match(/\d+$/)[0]
+    }))
+  ))
 }

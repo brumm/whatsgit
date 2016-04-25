@@ -6,8 +6,8 @@ import * as ghApi from '../utils/api'
 import makeId        from '../utils/makeId'
 import arrayToObject from '../utils/arrayToObject'
 import objectToArray from '../utils/objectToArray'
-import filterIssues  from '../utils/filterIssues'
 import getRepo       from '../utils/getRepo'
+import filterIssues  from '../utils/filterIssues'
 
 export const setFilters         = createAction('SET_FILTERS')
 export const setIssues          = createAction('SET_ISSUES')
@@ -25,36 +25,13 @@ export const setIssue = createAction('SET_ISSUE',
 
 export const createFilter = createAction('CREATE_FILTER',
   (filter, id=makeId()) => ({
-    [id]: filter
+    [id]: {
+      count: 0,
+      matchedIssues: [],
+      ...filter
+    }
   })
 )
-
-export const createFilterOutputCache = createAction('CREATE_FILTER_OUTPUT_CACHE',
-  (issues, query, id) => {
-    issues = filterIssues(issues, query)
-    let issueIds = objectToArray(issues)
-      .sort((a, b) => a.score < b.score ? 1 : -1)
-      .sort((a, b) => a.updated_at < b.updated_at ? 1 : -1)
-      .map(({id}) => id)
-
-    return { [id]: issueIds }
-  }
-)
-
-export const updateFilterOutputCache = () => (
-  (dispatch, getState) => {
-    let {issues, filters} = getState()
-
-  }
-)
-
-export const createFilterAndCreateFilterOutputCache = (filter, id=makeId()) => (
-  (dispatch, getState) => {
-    dispatch(createFilter(filter, id))
-    dispatch(createFilterOutputCache(getState().issues, filter.query, id))
-  }
-)
-
 
 export const getUser = () => (
   (dispatch, getState) => (
@@ -67,26 +44,42 @@ export const getUser = () => (
   )
 )
 
+export const refreshIssues = () => (
+  (dispatch, getState) => (
+    dispatch(getIssues(getState().user.login))
+  )
+)
+
 export const appBootstrap = window.appBootstrap = () => (
   (dispatch, getState) => (
     ghApi.getUser()
       .then(user => {
-        dispatch(setFilters({}))
+        dispatch(createFilter({ type: 'default', name: 'Open Issues',    query: { state: 'open', pull_request: { $exists: false } } }, getState().defaultFilterId))
+        dispatch(createFilter({ type: 'default', name: 'Open PRs',       query: { state: 'open', pull_request: { $exists: true } } }))
+        dispatch(createFilter({ type: 'default', name: 'Closed Issues',  query: { state: 'closed', pull_request: { $exists: false } } }))
+        dispatch(createFilter({ type: 'default', name: 'Closed PRs',     query: { state: 'closed', pull_request: { $exists: true } } }))
+        dispatch(createFilter({ type: 'default', name: 'Private Repos',  query: { state: 'open', access: 'private' } }))
+        dispatch(createFilter({ type: 'default', name: 'Public Repos',   query: { state: 'open', access: 'public' } }))
+        dispatch(createFilter({ type: 'default', name: 'Assigned to me', query: { state: 'open', 'assignee.login': user.login } }))
+        dispatch(createFilter({ type: 'default', name: 'Created by me',  query: { state: 'open', 'user.login': user.login } }))
+        dispatch(createFilter({ type: 'default', name: 'Participating',  query: { state: 'open', $nor: [ {'user.login': user.login}, {'assignee.login': user.login} ] } }))
         dispatch(getNotifications())
         dispatch(getIssues(user.login))
-          .then(() => {
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Open Issues',    query: { state: 'open', pull_request: { $exists: false } } }, getState().defaultFilterId))
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Open PRs',       query: { state: 'open', pull_request: { $exists: true } } }))
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Closed Issues',  query: { state: 'closed', pull_request: { $exists: false } } }))
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Closed PRs',     query: { state: 'closed', pull_request: { $exists: true } } }))
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Private Repos',  query: { access: 'private' } }))
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Public Repos',   query: { access: 'public' } }))
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Assigned to me', query: { 'assignee.login': user.login } }))
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Created by me',  query: { 'user.login': user.login } }))
-            dispatch(createFilterAndCreateFilterOutputCache({ type: 'default', name: 'Participating',  query: { $nor: [ {'user.login': user.login}, {'assignee.login': user.login} ] } }))
-          })
       })
   )
+)
+
+export const updateFilters = (username) => (
+  (dispatch, getState) => {
+    objectToArray(getState().filters).forEach(filter => {
+      let matchedIssues = Object.keys(filterIssues(getState().issues, filter.query))
+      dispatch(createFilter({
+        ...filter,
+        count: matchedIssues.length,
+        matchedIssues
+      }, filter.id))
+    })
+  }
 )
 
 export const getIssues = (username) => (
@@ -116,6 +109,7 @@ export const getIssues = (username) => (
         ...privateIssues,
         ...publicIssues
       }))
+      dispatch(updateFilters())
     })
   )
 )
