@@ -37,6 +37,12 @@ export const getUser = () => (
   (dispatch, getState) => (
     ghApi.getUser()
       .then(user => {
+        if (process.env.DEV === undefined) {
+          Raven.setUserContext({
+            email: user.email,
+            login: user.login
+          })
+        }
         dispatch(setUser(user))
         dispatch(setLoggedIn(true))
         dispatch(appBootstrap())

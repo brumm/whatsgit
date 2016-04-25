@@ -26,6 +26,9 @@ hashHistory.listen(({pathname}) => console.info('[location]', pathname))
 function requireLogin(nextState, replaceState) {
   if (store.getState().loggedIn === false) {
     replaceState('/login')
+  } else if (process.env.DEV === undefined) {
+    let { user: { email, login } } = store.getState()
+    Raven.setUserContext({ email, login })
   }
 }
 
