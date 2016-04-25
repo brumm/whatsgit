@@ -45,9 +45,12 @@ export const getUser = () => (
 )
 
 export const refreshIssues = () => (
-  (dispatch, getState) => (
+  (dispatch, getState) => {
     dispatch(getIssues(getState().user.login))
-  )
+    Object.keys(getState().comments).forEach(issueId => (
+      dispatch(getComments(issueId))
+    ))
+  }
 )
 
 export const appBootstrap = window.appBootstrap = () => (
