@@ -59,6 +59,7 @@ class IssuesListItem extends React.Component {
   issues = objectToArray(issues, ({id}) => ({
     unread: notifications.includes(id)
   }))
+  .sort((a, b) => Date.parse(a.updated_at) < Date.parse(b.updated_at) ? 1 : -1)
 
   return {
     filter: filters[filterId],
