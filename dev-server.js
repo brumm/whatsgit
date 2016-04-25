@@ -10,6 +10,7 @@ const nwbExpress = require('nwb/express')
 
 app.use(nwbExpress(express, {
   info: false,
+  reload: true,
   autoInstall: true
 }))
 
