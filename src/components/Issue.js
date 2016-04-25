@@ -43,9 +43,9 @@ export default class Issue extends React.Component {
 
         <Flex className={style.header} shrink={0}>
 
-          <div className={style.avatar}>
+          <Flex className={style.avatar} shrink={0}>
             <img width="48px" height="48px" src={this.props.issue.user.avatar_url + '&s=48'} />
-          </div>
+          </Flex>
 
           <Flex direction='column' justifyContent='center' grow={1}>
             <div className={style.url}>
