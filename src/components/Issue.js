@@ -4,6 +4,7 @@ import Flex from 'flex-component'
 import MarkdownIt from 'markdown-it'
 import emojiIt from 'markdown-it-emoji'
 import highlightIt from 'markdown-it-highlightjs'
+import taskLists from 'markdown-it-task-lists'
 
 import style from '../styles/Issue.scss'
 import CommentsList from './CommentsList'
@@ -16,6 +17,7 @@ const md = new MarkdownIt({
 })
 md.use(emojiIt)
 md.use(highlightIt, { auto: true, code: false })
+md.use(taskLists)
 
 function isLight(c) {
   let sum = parseInt(c[0]+c[1], 16)
