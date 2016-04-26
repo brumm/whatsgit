@@ -12,23 +12,6 @@ var MenuItem = remote.require('menu-item');
 
 class FiltersListItem extends React.Component {
 
-  onContextMenu = ::this.onContextMenu
-  onContextMenu(e) {
-    var menu = new Menu();
-    menu.append(new MenuItem({
-      label: 'New filter',
-      click: () => {}
-    }));
-    menu.append(new MenuItem({
-      label: `Edit '${this.props.name}'`,
-      click: () => {}
-    }));
-
-
-    e.preventDefault()
-    menu.popup(remote.getCurrentWindow())
-  }
-
   render() {
     return (
       <Link
@@ -36,7 +19,6 @@ class FiltersListItem extends React.Component {
         className={style.FilterListItem}
         activeClassName={style.FilterListItemSelected}
         key={this.props.id}
-        onContextMenu={this.onContextMenu}
       >
         <div className={style.name}>{this.props.name}</div>
         <Flex alignItems='center' justifyContent='center' className={style.count}>{this.props.count}</Flex>
