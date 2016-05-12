@@ -6,10 +6,6 @@ import Flex from 'flex-component'
 import style from '../styles/Filters.scss'
 import objectToArray from '../utils/objectToArray'
 
-var remote = window.require('remote');
-var Menu = remote.require('menu');
-var MenuItem = remote.require('menu-item');
-
 class FiltersListItem extends React.Component {
 
   render() {
