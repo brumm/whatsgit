@@ -19,6 +19,54 @@ md.use(emojiIt)
 
 import style from '../styles/CommentsList.scss'
 
+const events = {
+  closed: event => `${event.actor.login} closed this`,
+  reopened: event => `${event.actor.login} reopened this`,
+  merged: event => `${event.actor.login} merged this pull request`,
+  assigned: event => (
+    event.assigner.login === event.assignee.login
+    ? `${event.assigner.login} self-assigned this`
+    : `${event.assigner.login} assigned ${event.assignee.login}`
+  ),
+  unassigned: event => (
+    event.assigner.login === event.assignee.login
+    ? `${event.assigner.login} removed their assignment`
+    : `${event.assigner.login} unassigned ${event.assignee.login}`
+  ),
+  labeled: event => (
+    <Flex alignItems='center'>
+      <span>{`${event.actor.login} added the`}</span>
+      <span className={style.eventLabel}>{event.label.name}</span>
+      <span>label</span>
+    </Flex>
+  ),
+  unlabeled: event => (
+    <Flex alignItems='center'>
+      <span>{`${event.actor.login} removed the`}</span>
+      <span className={style.eventLabel}>{event.label.name}</span>
+      <span>label</span>
+    </Flex>
+  ),
+  milestoned:        event => `${event.actor.login} added a milestone`,
+  demilestoned:      event => `${event.actor.login} removed a milestone`,
+  renamed:           event => (
+    <div>
+      <span>{`${event.actor.login} renamed this from`}</span>
+      <strong>{event.rename.from}</strong>
+      <span>to</span>
+      <strong>{event.rename.to}</strong>
+    </div>
+  ),
+  // renamed:           event => `${event.actor.login} renamed this from '${event.rename.from}' to '${event.rename.to}'`,
+  locked:            event => `${event.actor.login} locked this`,
+  unlocked:          event => `${event.actor.login} unlocked this`,
+  head_ref_deleted:  event => `pull request's branch was deleted`,
+  head_ref_restored: event => `pull request's branch was restored.`,
+  // subscribed:        event => event.event,
+  // referenced:        event => event.event,
+  // mentioned:         event => event.event,
+}
+
 class Comment extends React.Component {
   render() {
     return (
@@ -31,7 +79,7 @@ class Comment extends React.Component {
 
           <div className={style.username}>
             {this.props.user.login} commented <TimeAgo date={this.props.updated_at} />
-        </div>
+          </div>
         </Flex>
 
         <div
@@ -108,14 +156,45 @@ class NewComment extends React.Component {
   }
 }
 
+class Event extends React.Component {
+  render() {
+    let eventFormatter = events[this.props.event]
+    return eventFormatter ? (
+      <Flex className={style.event} alignItems='center' justifyContent='space-between'>
+        <Flex>
+          <Octicon name='primitive-dot' />
+          {eventFormatter(this.props)}
+        </Flex>
+        <TimeAgo style={{ color: '#bcc7d1' }} date={this.props.created_at} />
+      </Flex>
+    ) : null
+  }
+}
+
 @connect(({user}) => ({user}))
 export default class CommentsList extends React.Component {
+  getComponent(comment, index, collection) {
+    if (comment.body) {
+      if (collection[index - 1] && collection[index - 1].body && collection[index - 1].user.login === comment.user.login) {
+        return <Flex className={style.compactComment} alignItems='center' key={comment.id}>
+          <div
+            className={[style.body, 'markdown-body'].join(' ')}
+            style={{ flexGrow: 1, flexShrink: 1 }}
+            dangerouslySetInnerHTML={{__html: md.render(comment.body)}}
+            />
+        </Flex>
+      } else {
+        return <Comment key={comment.id} {...comment} />
+      }
+    } else {
+      return <Event key={comment.id} {...comment} />
+    }
+  }
+
   render() {
     return (
       <Flex direction='column' className={style.CommentsList} shrink={0}>
-        {this.props.comments.map(comment => (
-          <Comment key={comment.id} {...comment} />
-        ))}
+        {this.props.comments.map(this.getComponent)}
 
         <NewComment issueId={this.props.issueId} user={this.props.user} />
 

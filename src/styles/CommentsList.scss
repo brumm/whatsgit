@@ -61,3 +61,35 @@
     resize: none;
   }
 }
+
+.event {
+  color: #8896a2;
+  font-size: 12px;
+  margin: 0 5px;
+  padding: 0 10px;
+  min-height: 25px;
+  position: relative;
+
+  :global(.octicon) {
+    color: #d7dee6;
+  }
+}
+
+.eventLabel {
+  font-size: 10px;
+  display: inline-block;
+  padding: 4px 7px;
+  margin: 0 4px;
+  background-color: #d7dee6;
+  border-radius: 50px;
+}
+
+.compactComment {
+  margin: -6px 5px 5px;
+  padding: 10px;
+  min-height: 35px;
+  overflow: hidden;
+  border-top: 1px solid #E9EFF4;
+  border-bottom: 1px solid #d9e0e6;
+  background-color: #fff;
+}

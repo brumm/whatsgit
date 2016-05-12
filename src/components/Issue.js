@@ -26,11 +26,20 @@ function isLight(c) {
   return sum > 400
 }
 
-@connect(({user, issues, comments}, {params: {issueId}}) => ({
-  user,
-  issue: issues[issueId],
-  comments: comments[issueId] || []
-}))
+@connect(({user, issues, comments, events}, {params: {issueId}}) => {
+  comments = comments[issueId] || []
+  events = events[issueId] || []
+
+  comments = comments
+    .concat(events)
+    .sort((a, b) => Date.parse(a.created_at) < Date.parse(b.created_at) ? -1 : 1)
+
+  return {
+    user,
+    issue: issues[issueId],
+    comments,
+  }
+})
 export default class Issue extends React.Component {
   render() {
     let isIssue = this.props.issue.pull_request === undefined
@@ -64,7 +73,17 @@ export default class Issue extends React.Component {
             {this.props.issue.labels.length > 0 &&
               <Flex className={style.labels}>
                 {this.props.issue.labels.map(label => (
-                  <Flex key={label.name} tagName='a' href={`https://github.com/${this.props.issue.owner}/${this.props.issue.repo}/labels/${label.name}`} alignItems='center' className={style.label} style={{ backgroundColor: `#${label.color}`, color: isLight(label.color) ? '#333' : 'white' }}>{label.name}</Flex>
+                  <Flex
+                    key={label.name}
+                    tagName='a'
+                    href={`https://github.com/${this.props.issue.owner}/${this.props.issue.repo}/labels/${label.name}`}
+                    alignItems='center'
+                    className={style.label}
+                    style={{
+                      backgroundColor: `#${label.color}`, color: isLight(label.color) ? '#333' : 'white'
+                    }}>
+                      {label.name}
+                    </Flex>
                 ))}
               </Flex>
             }

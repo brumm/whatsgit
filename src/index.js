@@ -6,7 +6,7 @@ import { Router, IndexRoute, Route, Redirect, hashHistory } from 'react-router'
 import { Provider } from 'react-redux'
 
 import configureStore from './redux/configureStore'
-import { getComments } from './redux/actions'
+import { getComments, getEvents } from './redux/actions'
 
 import App from './components/App'
 import Login from './components/Login'
@@ -32,18 +32,15 @@ function requireLogin(nextState, replaceState) {
   }
 }
 
-function loadCommentsIfNeeded(nextState, replaceState, done) {
+function loadCommentsIfNeeded(nextState, replaceState) {
   const {filterId, issueId} = nextState.params
+  const issue = store.getState().issues[issueId]
 
-  if (!store.getState().issues[issueId]) {
+  if (!issue) {
     replaceState(`/inbox/filters/${filterId}`)
   } else {
-    if (store.getState().comments[issueId] === undefined) {
-      store.dispatch(getComments(issueId))
-      done()
-    } else {
-      done()
-    }
+    store.dispatch(getComments(issueId))
+    store.dispatch(getEvents(issueId))
   }
 }
 

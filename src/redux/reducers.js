@@ -4,7 +4,7 @@ export default {
 
   notifications: handleActions({
     SET_NOTIFICATIONS: (state, {payload}) => payload
-  }, []),
+  }, {}),
 
   filters: handleActions({
     SET_FILTERS: (state, {payload}) => payload,
@@ -42,4 +42,10 @@ export default {
     })
   }, {}),
 
+  events: handleActions({
+    SET_EVENTS: (state, {payload}) => ({
+      ...state,
+      ...payload
+    })
+  }, {}),
 }

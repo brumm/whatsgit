@@ -13,6 +13,7 @@ export const setFilters         = createAction('SET_FILTERS')
 export const setIssues          = createAction('SET_ISSUES')
 export const setUser            = createAction('SET_USER')
 export const setComments        = createAction('SET_COMMENTS')
+export const setEvents          = createAction('SET_EVENTS')
 export const setLoggedIn        = createAction('SET_LOGGED_IN')
 export const setDefaultFilterId = createAction('SET_DEFAULT_FILTER_ID')
 export const setNotifications   = createAction('SET_NOTIFICATIONS')
@@ -50,12 +51,12 @@ export const getUser = () => (
   )
 )
 
-export const refreshIssues = () => (
+export const refreshData = () => (
   (dispatch, getState) => {
+    dispatch(getNotifications())
     dispatch(getIssues(getState().user.login))
-    Object.keys(getState().comments).forEach(issueId => (
-      dispatch(getComments(issueId))
-    ))
+    Object.keys(getState().comments).forEach(issueId => dispatch(getComments(issueId)))
+    Object.keys(getState().events).forEach(issueId => dispatch(getEvents(issueId)))
   }
 )
 
@@ -80,8 +81,9 @@ export const appBootstrap = window.appBootstrap = () => (
 
 export const updateFilters = (username) => (
   (dispatch, getState) => {
-    objectToArray(getState().filters).forEach(filter => {
-      let matchedIssues = Object.keys(filterIssues(getState().issues, filter.query))
+    let { filters, issues } = getState()
+    objectToArray(filters).forEach(filter => {
+      let matchedIssues = Object.keys(filterIssues(issues, filter.query))
       dispatch(createFilter({
         ...filter,
         count: matchedIssues.length,
@@ -123,6 +125,16 @@ export const getIssues = (username) => (
   )
 )
 
+export const getEvents = issueId => (
+  (dispatch, getState) => {
+    const {number, owner, repo} = getState().issues[issueId]
+
+    return ghApi.issueEvents(owner, repo, number)
+      .then(events => dispatch(setEvents({
+        [issueId]: events
+      })))
+  }
+)
 export const getComments = (issueId) => (
   (dispatch, getState) => {
     const {number, owner, repo} = getState().issues[issueId]
@@ -137,7 +149,10 @@ export const getComments = (issueId) => (
 export const getNotifications = () => (
   (dispatch, getState) => {
     return ghApi.getNotifications()
-      .then(notifications => dispatch(setNotifications(notifications)))
+      .then(notifications => {
+        notifications = arrayToObject(notifications)
+        dispatch(setNotifications(notifications))
+      })
   }
 )
 

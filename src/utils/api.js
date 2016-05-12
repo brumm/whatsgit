@@ -6,13 +6,13 @@ function request(method, url, params) {
     let req =
       superagent[method]('https://api.github.com' + url)
       [method === 'get' ? 'query' : 'send'](params)
-      .set('Accept', 'application/json')
-      .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
 
     if (TOKEN) {
       req
-      .set('Accept', 'application/vnd.github.v3+json')
-      .set('Authorization', 'token ' + TOKEN)
+        .set('Accept', 'application/vnd.github.v3+json')
+        .set('Authorization', 'token ' + TOKEN)
     }
     req.end((error, response) => {
       if (error || !response || !response.ok) { reject(error || response) }
@@ -48,6 +48,10 @@ export function issueSearch(query) {
   }).then(body => body.items)
 }
 
+export function issueEvents(owner, repo, number) {
+  return get(`/repos/${owner}/${repo}/issues/${number}/events`)
+}
+
 export function issueComments(owner, repo, number) {
   return get(`/repos/${owner}/${repo}/issues/${number}/comments`)
 }
@@ -72,7 +76,8 @@ export function getNotifications() {
   return get('/notifications').then(notifications => (
     notifications.map(notification => ({
       ...notification,
-      issueId: notification.subject.url.match(/\d+$/)[0]
+      issueNumber: notification.subject.url.match(/\d+$/)[0],
+      threadId: notification.subscription_url.match(/(\d+)\/subscription$/)[1],
     }))
   ))
 }
