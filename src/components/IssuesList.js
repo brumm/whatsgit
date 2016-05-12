@@ -5,7 +5,7 @@ import Flex from 'flex-component'
 import removeMarkdown from 'remove-markdown'
 import Octicon from 'react-octicon'
 import { hashHistory } from 'react-router'
-
+import sortBy from 'lodash.sortby'
 
 import objectToArray from '../utils/objectToArray'
 import style from '../styles/IssuesList.scss'
@@ -59,10 +59,15 @@ class IssuesListItem extends React.Component {
   if (filters[filterId]) {
     issues = filters[filterId].matchedIssues.map(issueId => issues[issueId])
   }
-  issues = objectToArray(issues, ({id}) => ({
-    unread: notifications.includes(id)
+  let issueNumbersWithNotifications = objectToArray(notifications).map(({issueNumber}) => parseInt(issueNumber, 10))
+
+  issues = objectToArray(issues, ({number}) => ({
+    unread: issueNumbersWithNotifications.includes(number),
   }))
-  .sort((a, b) => Date.parse(a.updated_at) < Date.parse(b.updated_at) ? 1 : -1)
+  .sort((a, b) => Date.parse(a.created_at) < Date.parse(b.created_at) ? -1 : 1)
+  .sort((a, b) => Date.parse(a.updated_at) < Date.parse(b.updated_at) ? -1 : 1)
+
+  issues = sortBy(issues, ['unread', ({state}) => state === 'open']).reverse()
 
   return {
     filter: filters[filterId],

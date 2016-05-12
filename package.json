@@ -14,6 +14,7 @@
   "dependencies": {
     "alphanumeric-id": "^1.0.0",
     "flex-component": "^0.1.3",
+    "lodash.sortby": "^4.4.2",
     "markdown-it": "^5.1.0",
     "markdown-it-emoji": "^1.1.0",
     "markdown-it-task-lists": "^1.2.0",
