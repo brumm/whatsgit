@@ -11,4 +11,109 @@
   );
   border-bottom: 1px solid #afafaf;
   font-size: 13px;
+
+  .segmentedButtonGroup + .segmentedButtonGroup {
+    margin-left: 10px;
+  }
+
+  .segmentedButtonGroup {
+    overflow: visible;
+
+    .button:first-child {
+      &, &:after {
+        border-radius: 4px 0 0 4px;
+      }
+      &:before {
+        border-radius: 5px 0 0 5px;
+      }
+    }
+    .button:last-child {
+      &, &:after {
+        border-radius: 0 4px 4px 0;
+      }
+      &:before {
+        border-radius: 0 5px 5px 0;
+      }
+    }
+  }
+
+  .buttonGroup {
+    overflow: visible;
+
+    .button {
+      &, &:after {
+        border-radius: 4px;
+      }
+      &:before {
+        border-radius: 5px;
+      }
+    }
+
+    .button + .button {
+      margin-left: 10px;
+    }
+  }
+}
+
+.button {
+  z-index: 1;
+  min-width: 40px;
+  overflow: visible;
+  position: relative;
+  height: 22px;
+  border: none;
+  background: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+
+  &:after {
+    z-index: -1;
+    background-image: linear-gradient(#FCFCFC, #F1F1F1);
+    box-shadow: 0 1px 0 #FDFDFD inset;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  &:before {
+    z-index: -1;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+  }
+
+  &:active {
+    &:after {
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+      background-image: linear-gradient(#E5E5E5, #DCDCDC);
+    }
+  }
+
+  .icon + span {
+    margin-left: 5px;
+  }
+
+  .icon {
+    color: #737373;
+    position: relative;
+    top: 1px
+  }
+}
+
+.activeButton {
+  composes: button;
+  box-shadow: 0 1px 0 #686768;
+  &:after {
+    background-image: linear-gradient(#706F70, #686768);
+    box-shadow: 0 -1px 0 #706F70;
+  }
+
+  .icon {
+    color: #fff;
+  }
 }
