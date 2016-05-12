@@ -21,4 +21,15 @@
   border-radius: 3px;
   padding: 15px 30px;
   font-size: 30px;
+  transition: box-shadow 200ms ease-in-out;
+
+  &:hover {
+    box-shadow:
+      0 0 0 1px #d4e0e9,
+      0 10px 40px #bccdda;
+  }
+
+  &:active {
+    background-color: #fafafa;
+  }
 }
