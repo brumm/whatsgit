@@ -26,7 +26,10 @@ class IssuesListItem extends React.Component {
           {`${this.props.owner}/${this.props.repo}`}
 
           {this.props.comments > 0 &&
-            <div className={style.commentCount}>{this.props.comments}</div>
+            <Flex className={style.commentCount} alignItems='center'>
+              <Octicon name='comment' />
+              {this.props.comments}
+            </Flex>
           }
         </Flex>
 
