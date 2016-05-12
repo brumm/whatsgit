@@ -20,10 +20,10 @@ class IssuesListItem extends React.Component {
         activeClassName={style.IssueListItemSelected}
         key={this.props.id}
       >
-        <Flex className={style.repo}>
+        <Flex className={style.repo} alignItems='center'>
           {this.props.unread && <div className={style.unreadMarker} />}
 
-          {`${this.props.owner}/${this.props.repo}`}
+          {`${this.props.owner}/${this.props.repo}/${this.props.number}`}
 
           {this.props.comments > 0 &&
             <Flex className={style.commentCount} alignItems='center'>
