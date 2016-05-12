@@ -30,6 +30,8 @@ export default class Filters extends React.Component {
   render() {
     return (
       <Flex className={style.FilterList} direction='column'>
+        <Flex alignItems='flex-end' className={style.label}>Filters</Flex>
+
         {this.props.filters.map(filter => (
           <FiltersListItem key={filter.id} {...filter} />
         ))}
