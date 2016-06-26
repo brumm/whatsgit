@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import Textarea from 'react-textarea-autosize'
 import highlightIt from 'markdown-it-highlightjs'
 
+import Avatar from './Avatar'
 import { postComment } from '../redux/actions'
 
 const md = new MarkdownIt({
@@ -73,9 +74,7 @@ class Comment extends React.Component {
       <Flex className={style.Comment} shrink={0} direction='column'>
 
         <Flex className={style.header} shrink={0} alignItems='center' grow={1}>
-          <div className={style.avatar}>
-            <img width="48px" height="48px" src={this.props.user.avatar_url + '&s=48'} />
-          </div>
+          <Avatar src={this.props.user.avatar_url + '&s=48'} rounded={2} size={28} />
 
           <div className={style.username}>
             {this.props.user.login} commented <TimeAgo date={this.props.updated_at} />
@@ -129,9 +128,7 @@ class NewComment extends React.Component {
 
         <Flex>
           <Flex className={style.header} shrink={0} alignItems='center'>
-            <div className={style.avatar}>
-              <img width="48px" height="48px" src={this.props.user.avatar_url + '&s=48'} />
-            </div>
+            <Avatar src={this.props.user.avatar_url + '&s=48'} size={28} rounded={2} />
           </Flex>
 
           <Flex direction='column' grow={1}>

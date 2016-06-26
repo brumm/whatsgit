@@ -15,20 +15,11 @@
     border-bottom: 1px solid #E8E8E8;
 
     .username {
+      margin-left: 10px;
       font-size: 14px;
       color: silver;
     }
 
-    .avatar {
-      align-self: stretch;
-      flex-shrink: 0;
-      max-width: 28px;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .avatar + div {
-      margin-left: 10px;
-    }
   }
 
   .body {

@@ -8,6 +8,7 @@ import taskLists from 'markdown-it-task-lists'
 
 import style from '../styles/Issue.scss'
 import CommentsList from './CommentsList'
+import Avatar from './Avatar'
 
 import { closeIssue, openIssue } from '../redux/actions'
 
@@ -53,11 +54,12 @@ export default class Issue extends React.Component {
         direction='column'
       >
 
-        <Flex className={style.header} shrink={0}>
+        <Flex className={style.header} shrink={0} alignItems='center'>
 
-          <Flex className={style.avatar} shrink={0}>
-            <img width="48px" height="48px" src={this.props.issue.user.avatar_url + '&s=48'} />
-          </Flex>
+          <Avatar src={this.props.issue.user.avatar_url + '&s=48'} size={48} rounded={2} />
+          {this.props.issue.assignee &&
+            <Avatar src={this.props.issue.assignee.avatar_url + '&s=48'} size={48} rounded={2} />
+          }
 
           <Flex direction='column' justifyContent='center' grow={1}>
             <div className={style.url}>
