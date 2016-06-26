@@ -6,7 +6,7 @@ import { Router, IndexRoute, Route, Redirect, hashHistory } from 'react-router'
 import { Provider } from 'react-redux'
 
 import configureStore from './redux/configureStore'
-import { getComments, getEvents } from './redux/actions'
+import { refreshData, getComments, getEvents } from './redux/actions'
 
 import App from './components/App'
 import Login from './components/Login'
@@ -26,9 +26,13 @@ hashHistory.listen(({pathname}) => console.info('[location]', pathname))
 function requireLogin(nextState, replaceState) {
   if (store.getState().loggedIn === false) {
     replaceState('/login')
-  } else if (process.env.DEV === undefined) {
-    let { user: { email, login } } = store.getState()
-    Raven.setUserContext({ email, login })
+  } else {
+    store.dispatch(refreshData())
+
+    if (process.env.DEV === undefined) {
+      let { user: { email, login } } = store.getState()
+      Raven.setUserContext({ email, login })
+    }
   }
 }
 
