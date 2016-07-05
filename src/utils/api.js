@@ -1,8 +1,9 @@
 import superagent from 'superagent'
 
-function request(method, url, params) {
+function request(method, url, params={}) {
   const TOKEN = localStorage.getItem('token')
   return new Promise((resolve, reject) => {
+    console.info('[api]', method, url, params);
     let req =
       superagent[method]('https://api.github.com' + url)
       [method === 'get' ? 'query' : 'send'](params)
