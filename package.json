@@ -7,7 +7,7 @@
     "build": "nwb build && npm run fixfonts && npm run package",
     "package": "electron-packager ./public Whatsgit --overwrite --prune --platform=darwin --arch=x64 --version=0.36.7 --out='release'",
     "clean": "nwb clean",
-    "start": "node --harmony_destructuring --harmony_arrow_functions dev-server.js",
+    "start": "node dev-server.js",
     "test": "nwb test",
     "fixfonts": "sed -i '' 's/\\/build\\///g' ./public/build/vendor.css"
   },
