@@ -94,25 +94,16 @@ export default class Issue extends React.Component {
 
           {isIssueCreator &&
             <Flex direction='column' justifyContent='flex-end' shrink={0}>
-              {isIssue
-                ? (
-                  <Flex direction='column' justifyContent='flex-end' shrink={0}>
-                    {this.props.issue.state === 'open' &&
-                      <button onClick={() => this.props.dispatch(closeIssue(this.props.issue.id))} className={style.actionButton}>Close issue</button>
-                    }
-                    {this.props.issue.state === 'closed' &&
-                      <button onClick={() => this.props.dispatch(openIssue(this.props.issue.id))} className={style.actionButton}>Reopen issue</button>
-                    }
-                  </Flex>
-                )
-                : (
-                  <Flex direction='column' justifyContent='flex-end' shrink={0}>
-                    {this.props.issue.state === 'open' &&
-                      <button className={style.actionButton}>Merge pull request</button>
-                    }
-                  </Flex>
-                )
-              }
+              {isIssue && (
+                <Flex direction='column' justifyContent='flex-end' shrink={0}>
+                  {this.props.issue.state === 'open' &&
+                    <button onClick={() => this.props.dispatch(closeIssue(this.props.issue.id))} className={style.actionButton}>Close issue</button>
+                  }
+                  {this.props.issue.state === 'closed' &&
+                    <button onClick={() => this.props.dispatch(openIssue(this.props.issue.id))} className={style.actionButton}>Reopen issue</button>
+                  }
+                </Flex>
+              )}
             </Flex>
           }
         </Flex>
