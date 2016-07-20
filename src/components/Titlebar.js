@@ -6,8 +6,8 @@ import Octicon from 'react-octicon'
 import { refreshData } from '../redux/actions'
 import style from '../styles/Titlebar.scss'
 
-const Filterbutton = ({active, icon, label, spin}) => (
-  <Flex tagName='button' alignItems='center' justifyContent='center' className={active ? style.activeButton : style.button}>
+const Filterbutton = ({active, icon, label, spin, ...props}) => (
+  <Flex {...props} tagName='button' alignItems='center' justifyContent='center' className={active ? style.activeButton : style.button}>
     <Octicon className={style.icon} name={icon} spin={spin} />
     {label}
   </Flex>
