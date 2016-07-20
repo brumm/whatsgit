@@ -64,6 +64,10 @@
   :global(.octicon) {
     color: #d7dee6;
   }
+
+  > span {
+    flex-shrink: 0;
+  }
 }
 
 .eventLabel {
