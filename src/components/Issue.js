@@ -42,10 +42,19 @@ function isLight(c) {
     comments,
   }
 })
+
 export default class Issue extends React.Component {
+
+  canModifyIssue() {
+    return (
+      this.props.issue.owner === this.props.user.login ||
+      this.props.issue.user.login === this.props.user.login
+    )
+  }
+
   render() {
     let isIssue = this.props.issue.pull_request === undefined
-    let isIssueCreator = this.props.issue.user.login === this.props.user.login
+    let canModifyIssue = this.canModifyIssue()
     return (
       <Flex
         grow={1.2}
@@ -54,7 +63,7 @@ export default class Issue extends React.Component {
         direction='column'
       >
 
-        <Flex className={style.header} shrink={0} alignItems='center'>
+        <Flex className={style.header} shrink={0} alignItems='flex-start'>
 
           <Avatar src={this.props.issue.user.avatar_url + '&s=48'} size={48} rounded={2} />
           {this.props.issue.assignee &&
@@ -85,14 +94,14 @@ export default class Issue extends React.Component {
                     style={{
                       backgroundColor: `#${label.color}`, color: isLight(label.color) ? '#333' : 'white'
                     }}>
-                      {label.name}
-                    </Flex>
+                    {label.name}
+                  </Flex>
                 ))}
               </Flex>
             }
           </Flex>
 
-          {isIssueCreator &&
+          {canModifyIssue &&
             <Flex direction='column' justifyContent='flex-end' shrink={0}>
               {isIssue && (
                 <Flex direction='column' justifyContent='flex-end' shrink={0}>
@@ -101,6 +110,14 @@ export default class Issue extends React.Component {
                   }
                   {this.props.issue.state === 'closed' &&
                     <button onClick={() => this.props.dispatch(openIssue(this.props.issue.id))} className={style.actionButton}>Reopen issue</button>
+                  }
+                </Flex>
+              )}
+
+              {!isIssue && (
+                <Flex direction='column' justifyContent='flex-end' shrink={0}>
+                  {this.props.issue.state === 'open' &&
+                    <button onClick={() => this.props.dispatch(closeIssue(this.props.issue.id))} className={style.actionButton}>Close PR</button>
                   }
                 </Flex>
               )}
