@@ -93,7 +93,7 @@ class Comment extends React.Component {
 }
 
 @connect()
-class NewComment extends React.Component {
+class NewCommentBox extends React.Component {
   state = {
     showPreview: false,
     comment: ''
@@ -114,7 +114,7 @@ class NewComment extends React.Component {
 
   render() {
     return (
-      <Flex className={style.NewComment} shrink={0} direction='column'>
+      <Flex className={style.NewCommentBox} shrink={0} direction='column'>
 
         <Flex className={style.tools} alignItems='center' justifyContent='flex-end'>
           <Octicon
@@ -193,7 +193,7 @@ export default class CommentsList extends React.Component {
       <Flex direction='column' className={style.CommentsList} shrink={0}>
         {this.props.comments.map(this.getComponent)}
 
-        <NewComment issueId={this.props.issueId} user={this.props.user} />
+        <NewCommentBox issueId={this.props.issueId} user={this.props.user} />
 
       </Flex>
     )
