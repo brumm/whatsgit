@@ -48,9 +48,9 @@ const events = {
       <span>label</span>
     </Flex>
   ),
-  milestoned:        event => `${event.actor.login} added a milestone`,
-  demilestoned:      event => `${event.actor.login} removed a milestone`,
-  renamed:           event => (
+  milestoned: event => `${event.actor.login} added a milestone`,
+  demilestoned: event => `${event.actor.login} removed a milestone`,
+  renamed: event => (
     <div>
       <span>{`${event.actor.login} renamed this from`}</span>
       <strong>{event.rename.from}</strong>
@@ -58,14 +58,13 @@ const events = {
       <strong>{event.rename.to}</strong>
     </div>
   ),
-  // renamed:           event => `${event.actor.login} renamed this from '${event.rename.from}' to '${event.rename.to}'`,
-  locked:            event => `${event.actor.login} locked this`,
-  unlocked:          event => `${event.actor.login} unlocked this`,
-  head_ref_deleted:  event => `pull request's branch was deleted`,
+  locked: event => `${event.actor.login} locked this`,
+  unlocked: event => `${event.actor.login} unlocked this`,
+  head_ref_deleted: event => `pull request's branch was deleted`,
   head_ref_restored: event => `pull request's branch was restored.`,
-  // subscribed:        event => event.event,
-  // referenced:        event => event.event,
-  // mentioned:         event => event.event,
+  // subscribed: event => event.event,
+  // referenced: event => event.event,
+  // mentioned: event => event.event,
 }
 
 class Comment extends React.Component {
