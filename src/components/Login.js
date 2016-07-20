@@ -24,10 +24,11 @@ export default class Login extends React.Component {
         this.props.dispatch(setDefaultFilterId(defaultFilterId))
         this.props.dispatch(setLoggedIn(true))
         this.setState({ loading: true })
-        this.props.dispatch(getUser()).then(() => {
-          this.setState({ loading: false })
-          hashHistory.replace(`/inbox/filters/${defaultFilterId}`)
-        })
+        this.props.dispatch(getUser())
+          .then(() => {
+            this.setState({ loading: false })
+            hashHistory.replace(`/inbox/filters/${defaultFilterId}`)
+          })
       })
     auth.catch(::console.error)
   }
@@ -41,7 +42,11 @@ export default class Login extends React.Component {
         className={style.LoginPage}
         direction='column'
       >
-        <Octicon name='mark-github' mega />
+        <Octicon
+          name={this.state.loading ? 'sync' : 'mark-github'}
+          spin={this.state.loading}
+          mega
+        />
 
         <button className={style.LoginButton} onClick={::this.auth}>
           {this.state.loading

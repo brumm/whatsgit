@@ -73,6 +73,13 @@ export function getUser() {
   return get('/user')
 }
 
+export function getAccessibleRepos(affiliation = ['organization_member']) {
+  return get('/user/repos', {
+    affiliation: affiliation.join(','),
+    sort: 'pushed'
+  })
+}
+
 export function getNotifications() {
   return get('/notifications').then(notifications => (
     notifications.map(notification => ({

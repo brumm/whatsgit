@@ -19,9 +19,9 @@ export const setDefaultFilterId = createAction('SET_DEFAULT_FILTER_ID')
 export const setNotifications   = createAction('SET_NOTIFICATIONS')
 
 export const setIssue = createAction('SET_ISSUE',
-(issue, id) => ({
-  [id]: issue
-})
+  (issue, id) => ({
+    [id]: issue
+  })
 )
 
 export const createFilter = createAction('CREATE_FILTER',
@@ -44,46 +44,78 @@ export const getUser = () => (
             login: user.login
           })
         }
-        dispatch(setUser(user))
-        dispatch(setLoggedIn(true))
-        dispatch(appBootstrap())
+        return Promise.all([
+          dispatch(setUser(user)),
+          dispatch(setLoggedIn(true)),
+          dispatch(appBootstrap()),
+        ])
       })
   )
 )
 
 export const refreshData = () => (
   (dispatch, getState) => {
-    dispatch(getNotifications())
-    dispatch(getIssues(getState().user.login))
-    Object.keys(getState().comments).forEach(issueId => dispatch(getComments(issueId)))
-    Object.keys(getState().events).forEach(issueId => dispatch(getEvents(issueId)))
+    // dispatch(getNotifications())
+    return dispatch(getIssues())
+      .then(() => dispatch(updateFilters()))
+      .then(
+        Promise.all([
+          Object.keys(getState().comments).map(issueId => dispatch(getComments(issueId))),
+          Object.keys(getState().events).map(issueId => dispatch(getEvents(issueId))),
+        ])
+      )
   }
 )
 
-export const appBootstrap = window.appBootstrap = () => (
-  (dispatch, getState) => (
-    ghApi.getUser()
-      .then(user => {
-        dispatch(createFilter({ type: 'default', name: 'Open Issues',    query: { state: 'open', pull_request: { $exists: false } } }, getState().defaultFilterId))
-        dispatch(createFilter({ type: 'default', name: 'Open PRs',       query: { state: 'open', pull_request: { $exists: true } } }))
-        dispatch(createFilter({ type: 'default', name: 'Closed Issues',  query: { state: 'closed', pull_request: { $exists: false } } }))
-        dispatch(createFilter({ type: 'default', name: 'Closed PRs',     query: { state: 'closed', pull_request: { $exists: true } } }))
-        dispatch(createFilter({ type: 'default', name: 'Private Repos',  query: { access: 'private' } }))
-        dispatch(createFilter({ type: 'default', name: 'Public Repos',   query: { access: 'public' } }))
-        dispatch(createFilter({ type: 'default', name: 'Assigned to me', query: { 'assignee.login': user.login } }))
-        dispatch(createFilter({ type: 'default', name: 'Created by me',  query: { 'user.login': user.login } }))
-        dispatch(createFilter({ type: 'default', name: 'Participating',  query: { $nor: [ {'user.login': user.login}, {'assignee.login': user.login} ] } }))
-        dispatch(getNotifications())
-        dispatch(getIssues(user.login))
+const appBootstrap = () => (
+  (dispatch, getState) => {
+    let {user: { login }} = getState()
+
+    dispatch(createFilter({ order: 1, type: 'filter', name: 'Open Issues',      query: { state: 'open', pull_request: { $exists: false } } }, getState().defaultFilterId))
+    dispatch(createFilter({ order: 2, type: 'filter', name: 'Open PRs',         query: { state: 'open', pull_request: { $exists: true } } }))
+    dispatch(createFilter({ order: 3, type: 'filter', name: 'Closed Issues',    query: { state: 'closed', pull_request: { $exists: false } } }))
+    dispatch(createFilter({ order: 4, type: 'filter', name: 'Closed PRs',       query: { state: 'closed', pull_request: { $exists: true } } }))
+    dispatch(createFilter({ order: 5, type: 'filter', name: 'Private Repos',    query: { access: 'private' } }))
+    dispatch(createFilter({ order: 6, type: 'filter', name: 'Public Repos',     query: { access: 'public' } }))
+    dispatch(createFilter({ order: 7, type: 'filter', name: 'Assigned to me',   query: { 'assignee.login': login } }))
+    dispatch(createFilter({ order: 8, type: 'filter', name: 'Created by me',    query: { 'user.login': login } }))
+    dispatch(createFilter({ order: 9, type: 'filter', name: 'Participating',    query: { $nor: [ {'user.login': login}, {'assignee.login': login} ] } }))
+
+    // dispatch(getNotifications())
+
+    return all({
+      orgRepos: ghApi.getAccessibleRepos(['organization_member']),
+      ownRepos: ghApi.getAccessibleRepos(['owner'])
+    })
+      .then(({orgRepos, ownRepos}) => {
+        orgRepos.forEach(repo => dispatch(createFilter({
+          type: 'organization-repo',
+          name: repo.full_name,
+          query: {
+            owner: repo.owner.login,
+            repo: repo.name
+          }
+        })))
+        ownRepos.forEach(repo => dispatch(createFilter({
+          type: 'my-repo',
+          name: repo.name,
+          query: {
+            owner: login,
+            repo: repo.name
+          }
+        })))
       })
-  )
+      .then(() => dispatch(getIssues()))
+      .then(() => dispatch(updateFilters()))
+  }
 )
 
-export const updateFilters = (username) => (
+export const updateFilters = () => (
   (dispatch, getState) => {
     let { filters, issues } = getState()
     objectToArray(filters).forEach(filter => {
       let matchedIssues = Object.keys(filterIssues(issues, filter.query))
+
       dispatch(createFilter({
         ...filter,
         count: matchedIssues.length,
@@ -93,12 +125,12 @@ export const updateFilters = (username) => (
   }
 )
 
-export const getIssues = (username) => (
-  (dispatch, getState) => (
-
-    all({
-      privateIssues: ghApi.issueSearch(`involves:${username} is:private`),
-      publicIssues: ghApi.issueSearch(`involves:${username} is:public`)
+export const getIssues = () => (
+  (dispatch, getState) => {
+    let {user: { login }} = getState()
+    return all({
+      privateIssues: ghApi.issueSearch(`involves:${login} is:private`),
+      publicIssues: ghApi.issueSearch(`involves:${login} is:public`)
     })
     .then(({privateIssues, publicIssues}) => {
 
@@ -120,9 +152,8 @@ export const getIssues = (username) => (
         ...privateIssues,
         ...publicIssues
       }))
-      dispatch(updateFilters())
     })
-  )
+  }
 )
 
 export const getEvents = issueId => (
