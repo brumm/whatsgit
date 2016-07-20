@@ -1,0 +1,35 @@
+.Comment {
+  margin: 5px;
+  overflow: hidden;
+  border-bottom: 1px solid #d9e0e6;
+  background-color: #fff;
+
+  .header {
+    padding: 10px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #E8E8E8;
+
+    .username {
+      margin-left: 10px;
+      font-size: 14px;
+      color: silver;
+    }
+
+  }
+
+  .body {
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: 10px;
+  }
+}
+
+.CompactComment {
+  margin: -6px 5px 5px;
+  padding: 10px;
+  min-height: 35px;
+  overflow: hidden;
+  border-top: 1px solid #E9EFF4;
+  border-bottom: 1px solid #d9e0e6;
+  background-color: #fff;
+}

@@ -1,0 +1,25 @@
+.Event {
+  color: #8896a2;
+  font-size: 12px;
+  margin: 0 5px;
+  padding: 0 10px;
+  min-height: 25px;
+  position: relative;
+
+  :global(.octicon) {
+    color: #d7dee6;
+  }
+
+  > span {
+    flex-shrink: 0;
+  }
+}
+
+.label {
+  font-size: 10px;
+  display: inline-block;
+  padding: 4px 7px;
+  margin: 0 4px;
+  background-color: #d7dee6;
+  border-radius: 50px;
+}
