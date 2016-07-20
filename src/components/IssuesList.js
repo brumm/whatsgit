@@ -5,7 +5,7 @@ import Flex from 'flex-component'
 import removeMarkdown from 'remove-markdown'
 import Octicon from 'react-octicon'
 import { hashHistory } from 'react-router'
-import sortBy from 'lodash.sortby'
+import sortBy from 'lodash/sortby'
 
 import objectToArray from '../utils/objectToArray'
 import style from '../styles/IssuesList.scss'
