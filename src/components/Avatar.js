@@ -7,6 +7,7 @@ export default function Avatar({src, size, rounded, style, ...otherProps}) {
       ...style,
       width: size,
       height: size,
+      flexShrink: 0,
       borderRadius: rounded === true
         ? size
         : typeof rounded === 'number'
