@@ -24,17 +24,16 @@ app.listen(port, 'localhost', function(err) {
   }
   console.log('server listening at http://localhost:' + port)
 
-  if (args['run-electron']) {
-    console.log('starting electron')
-    const child = proc.spawn(electron, ['.', '--enable-logging'], {
-      env: {
-        DEV: true
-      },
-      stdio: "inherit"
-    })
+  console.log('starting electron')
+  const child = proc.spawn(electron, ['.', '--enable-logging'], {
+    env: {
+      DEV: true
+    },
+    stdio: "inherit"
+  })
 
-    child.on('exit', function(code) {
-      process.exit()
-    });
-  }
+  child.on('exit', function(code) {
+    process.exit()
+  });
+
 })
