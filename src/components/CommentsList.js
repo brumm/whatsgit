@@ -52,10 +52,10 @@ const events = {
   demilestoned: event => `${event.actor.login} removed a milestone`,
   renamed: event => (
     <div>
-      <span>{`${event.actor.login} renamed this from`}</span>
-      <strong>{event.rename.from}</strong>
-      <span>to</span>
-      <strong>{event.rename.to}</strong>
+      <span>{`${event.actor.login}: renamed this to `}</span>
+      <strong title={`was: ${event.rename.from}`}>
+        {event.rename.to}
+      </strong>
     </div>
   ),
   locked: event => `${event.actor.login} locked this`,
