@@ -71,7 +71,7 @@ export default class Filters extends React.Component {
     } = this.props
 
     return (
-      <Flex className={style.FilterList} direction='column'>
+      <Flex className={style.FilterList} direction='column' shrink={0}>
 
         <Filterset
           filters={myRepoType}
