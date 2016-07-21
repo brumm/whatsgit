@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import Octicon from 'react-octicon'
 import Textarea from 'react-textarea-autosize'
 
+import { postComment } from '../redux/actions'
 import Avatar from './Avatar'
 
 const md = new MarkdownIt({

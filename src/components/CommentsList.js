@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import {Comment , CompactComment} from './Comment'
 import NewCommentBox from './NewCommentBox'
 import Event from './Event'
-import { postComment } from '../redux/actions'
 
 import style from '../styles/CommentsList.scss'
 
