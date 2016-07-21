@@ -98,7 +98,7 @@ const appBootstrap = () => (
         })))
         ownRepos.forEach(repo => dispatch(createFilter({
           type: 'my-repo',
-          name: repo.name,
+          name: repo.full_name,
           query: {
             owner: login,
             repo: repo.name
@@ -129,23 +129,22 @@ export const getIssues = () => (
   (dispatch, getState) => {
     let {user: { login }} = getState()
     return all({
-      privateIssues: ghApi.issueSearch(`involves:${login} is:private`),
-      publicIssues: ghApi.issueSearch(`involves:${login} is:public`)
+      userIssues: ghApi.issueSearch(`user:${login}`),
+      privateIssues: ghApi.issueSearch(`involves:${login} is:private is:issue`),
+      publicIssues: ghApi.issueSearch(`involves:${login} is:public is:issue`),
+      privatePullRequests: ghApi.issueSearch(`involves:${login} is:private is:pr`),
+      publicPullRequests: ghApi.issueSearch(`involves:${login} is:public is:pr`),
     })
-    .then(({privateIssues, publicIssues}) => {
+    .then(({privateIssues, publicIssues, userIssues, privatePullRequests, publicPullRequests}) => {
 
-      privateIssues = arrayToObject(privateIssues, issue => {
+      privateIssues = arrayToObject([...privateIssues, ...privatePullRequests], issue => {
         let [owner, repo] = getRepo(issue.html_url)
         return { owner, repo, access: 'private' }
       })
 
-      publicIssues = arrayToObject(publicIssues, issue => {
+      publicIssues = arrayToObject([...publicIssues, ...publicPullRequests, ...userIssues], issue => {
         let [owner, repo] = getRepo(issue.html_url)
-        return {
-          owner,
-          repo,
-          access: 'public'
-        }
+        return { owner, repo, access: 'public' }
       })
 
       dispatch(setIssues({
