@@ -11,13 +11,14 @@
     }
   }
 
-  .header {
-    border-bottom: none;
-  }
-
   .textarea {
     border: none;
     padding: 10px;
     resize: none;
   }
+}
+
+.header {
+  composes: header from "./Comment.scss";
+  border-bottom: none;
 }
